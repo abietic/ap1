@@ -1,0 +1,81 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+networks:
+  front-tier:
+    # driver: overlay
+    attachable: true
+  back-tier:
+    # driver: overlay
+    attachable: true
+
+services:
+  server-and-proxy:
+    image: nginx:1.16
+    volumes:
+      - "./nginx:/etc/nginx:ro" # :ro stands for read-only
+      - "./pages:/app"
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      # - spring-app
+      - adminer
+    networks:
+      - front-tier
+    command: [nginx]
+    # command: [nginx-debug, '-g', 'daemon off;']
+
+  db:
+    image: mysql:5.7
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    # ports:
+      # - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      # - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      # - MYSQL_USER=admin
+      # - MYSQL_PASSWORD=admin
+      - MYSQL_DATABASE=ap1
+    volumes:
+      # - "./db_test_entry:/docker-entrypoint-initdb.d"
+      - "./db_data_dir:/var/lib/mysql"
+      - "./db_config:/etc/mysql/conf.d"
+    networks:
+      back-tier:
+        aliases:
+          - database
+
+  spring-app:
+    # image: maven:3-openjdk-8
+    image: maven:3-jdk-11
+    working_dir: /app
+    volumes:
+      - "./:/app"
+      - "~/.m2:/root/.m2"
+    depends_on:
+      - db
+    networks:
+      front-tier:
+        aliases:
+          - webapp
+      back-tier:
+    command: ["./mvnw", "spring-boot:run"]
+    # command: ["./mvnw", "spring-boot:run", "-Dreactor.netty.http.server.accessLogEnabled=true"]
+    # command: ["./mvnw", "mybatis-generator:generate"]
+
+  # session_redis:
+  #   image: redis:5
+  #   depends_on:
+  #     - db
+  #   networks:
+
+  adminer:
+    image: adminer
+    depends_on:
+      - db
+    networks:
+      front-tier:
+        aliases:
+          - dblooker
+      back-tier:
