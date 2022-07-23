@@ -28,6 +28,7 @@ services:
 
   db:
     image: mysql:5.7
+    # 这个命令保证了数据库使用最长4bytes的UTF-8
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     # ports:
       # - "3306:3306"
@@ -38,8 +39,11 @@ services:
       # - MYSQL_PASSWORD=admin
       - MYSQL_DATABASE=ap1
     volumes:
+      # 这一条是初始化要使用的数据库和表用的
       # - "./db_test_entry:/docker-entrypoint-initdb.d"
+      # 这条是生成的数据库文件存放的位置
       - "./db_data_dir:/var/lib/mysql"
+      # 这个是设置数据库的配置文件，这时只设置了使用最长4bytes的UTF-8
       - "./db_config:/etc/mysql/conf.d"
     networks:
       back-tier:
@@ -55,6 +59,7 @@ services:
       - "~/.m2:/root/.m2"
     depends_on:
       - db
+      - session-redis
     networks:
       front-tier:
         aliases:
@@ -64,11 +69,50 @@ services:
     # command: ["./mvnw", "spring-boot:run", "-Dreactor.netty.http.server.accessLogEnabled=true"]
     # command: ["./mvnw", "mybatis-generator:generate"]
 
-  # session_redis:
-  #   image: redis:5
-  #   depends_on:
-  #     - db
-  #   networks:
+  session-redis:
+    image: redis:5
+    # ports:
+    #   - "6379:6379"
+    volumes:
+      - "./redis/session-data:/data"
+      - "./redis/session-conf/redis.conf:/etc/redis/redis.conf"
+    # depends_on:
+    #   - db
+    networks:
+      back-tier:
+        aliases:
+          - session-redis
+    command: [ "redis-server", "/etc/redis/redis.conf" ]
+
+  cache-redis:
+    image: redis:5
+    # ports:
+    #   - "6379:6379"
+    volumes:
+      - "./redis/cache-data:/data"
+      - "./redis/cache-conf/redis.conf:/etc/redis/redis.conf"
+    # depends_on:
+    #   - db
+    networks:
+      back-tier:
+        aliases:
+          - cache-redis
+    command: [ "redis-server", "/etc/redis/redis.conf" ]
+
+  token-redis:
+    image: redis:5
+    # ports:
+    #   - "6379:6379"
+    volumes:
+      - "./redis/token-data:/data"
+      - "./redis/token-conf/redis.conf:/etc/redis/redis.conf"
+    # depends_on:
+    #   - db
+    networks:
+      back-tier:
+        aliases:
+          - token-redis
+    command: [ "redis-server", "/etc/redis/redis.conf" ]
 
   adminer:
     image: adminer

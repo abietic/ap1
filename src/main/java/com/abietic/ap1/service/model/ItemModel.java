@@ -6,10 +6,15 @@ package com.abietic.ap1.service.model;
 // import javax.validation.constraints.NotNull;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 
-public class ItemModel {
+public class ItemModel implements Serializable {
+
+
+    private static final long serialVersionUID = 1L;
 
     private Integer id;
 
