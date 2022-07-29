@@ -43,100 +43,102 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount) throws BusinessException {
-        //1.校验下单状态，商品是否存在，用户是否合法，购买数量是否正确
-        ItemModel itemModel = itemService.getItemById(itemId);
-        if(itemModel == null){
+    public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount)
+            throws BusinessException {
+        // 1.校验下单状态，商品是否存在，用户是否合法，购买数量是否正确
+        // ItemModel itemModel = itemService.getItemById(itemId); // 第一次mysql查询
+        ItemModel itemModel = itemService.getItemByIdInCache(itemId);
+        if (itemModel == null) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "商品信息不存在");
         }
 
-        UserModel userModel = userService.getUserById(userId);
-        if(userModel == null){
+        // UserModel userModel = userService.getUserById(userId); // 第二次mysql查询
+        UserModel userModel = userService.getUserByIdInCache(userId);
+        if (userModel == null) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "用户信息不存在");
         }
 
-        if(amount <= 0 || amount > 99){
+        if (amount <= 0 || amount > 99) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "数量信息不正确");
         }
 
-        //校验活动信息
-        if(promoId != null){
-            //校验对应活动是否存在这个适用商品
-            if(!promoId.equals(itemModel.getPromoModel().getId())){
+        // 校验活动信息
+        if (promoId != null) {
+            // 校验对应活动是否存在这个适用商品
+            if (!promoId.equals(itemModel.getPromoModel().getId())) {
                 throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "活动信息不正确");
-            }else if (itemModel.getPromoModel().getStatus() != 2){
-            //活动是否正在进行中
+            } else if (itemModel.getPromoModel().getStatus() != 2) {
+                // 活动是否正在进行中
                 throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "活动还未开始");
             }
         }
 
-        //2.落单减库存，支付减库存
-        boolean result = itemService.decreaseStock(itemId, amount);
-        if(!result){
+        // 2.落单减库存，支付减库存
+        boolean result = itemService.decreaseStock(itemId, amount); // 一次数据更新，涉及行锁
+        if (!result) {
             throw new BusinessException(EmBusinessError.STOCK_NOT_ENOUGH);
         }
 
-        //3.订单入库
+        // 3.订单入库
         OrderModel orderModel = new OrderModel();
         orderModel.setItemId(itemId);
         orderModel.setUserId(userId);
         orderModel.setAmount(amount);
-        if(promoId != null){
-            //商品价格取特价
+        if (promoId != null) {
+            // 商品价格取特价
             orderModel.setItemPrice(itemModel.getPromoModel().getPromoItemPrice());
-        }else {
+        } else {
             orderModel.setItemPrice(itemModel.getPrice());
         }
         orderModel.setPromoId(promoId);
         orderModel.setOrderAmount(orderModel.getItemPrice().multiply(new BigDecimal(amount)));
 
-        //生成交易流水号
+        // 生成交易流水号
         orderModel.setId(generateOrderNo());
 
         Order order = convertFromOrderModel(orderModel);
-        orderMapper.insertSelective(order);
+        orderMapper.insertSelective(order); // 一次sql添加操作
 
-        //加上商品的销量
-        itemService.increaseSales(itemId, amount);
+        // 加上商品的销量
+        itemService.increaseSales(itemId, amount); // 一次数据修改，行锁
 
-        //4.返回前端
+        // 4.返回前端
         return orderModel;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String generateOrderNo(){
-        //订单号16位
+    public String generateOrderNo() {
+        // 订单号16位
         StringBuilder stringBuilder = new StringBuilder();
-        //前8位为 年月日
+        // 前8位为 年月日
         LocalDateTime now = LocalDateTime.now();
         String nowDate = now.format(DateTimeFormatter.ISO_DATE).replace("-", "");
         stringBuilder.append(nowDate);
 
-        //中间6位为自增序列
-        //获取当前sequence
+        // 中间6位为自增序列
+        // 获取当前sequence
         int sequence = 0;
         Sequence sequenceDO = sequenceMapper.getSequenceByName("order_info");
         sequence = sequenceDO.getCurrentValue();
         sequenceDO.setCurrentValue(sequenceDO.getCurrentValue() + sequenceDO.getStep());
         sequenceMapper.updateByPrimaryKey(sequenceDO);
 
-        //凑足6位
+        // 凑足6位
         String sequenceStr = String.valueOf(sequence);
         for (int i = 0; i < 6 - sequenceStr.length(); i++) {
             stringBuilder.append(0);
         }
         stringBuilder.append(sequence);
 
-
-        //后两位为分库分表位
+        // 后两位为分库分表位
         stringBuilder.append("00");
 
         return stringBuilder.toString();
     }
 
-    private Order convertFromOrderModel(OrderModel orderModel){
-        if(orderModel == null){
+    private Order convertFromOrderModel(OrderModel orderModel) {
+        if (orderModel == null) {
             return null;
         }
         Order orderDO = new Order();

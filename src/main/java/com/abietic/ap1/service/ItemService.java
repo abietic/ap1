@@ -23,4 +23,7 @@ public interface ItemService {
     //销量增加
     void increaseSales(Integer itemId, Integer amount);
 
+    // item 和 promo model 的缓存模型
+    ItemModel getItemByIdInCache(Integer id);
+
 }

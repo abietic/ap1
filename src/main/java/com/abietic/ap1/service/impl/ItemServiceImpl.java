@@ -4,6 +4,7 @@ import com.abietic.ap1.mapper.ItemMapper;
 import com.abietic.ap1.mapper.ItemStockMapper;
 import com.abietic.ap1.model.Item;
 import com.abietic.ap1.model.ItemStock;
+import com.abietic.ap1.mq.RocketMqProducer;
 import com.abietic.ap1.error.BusinessException;
 import com.abietic.ap1.error.EmBusinessError;
 import com.abietic.ap1.service.ItemService;
@@ -12,18 +13,31 @@ import com.abietic.ap1.service.model.ItemModel;
 import com.abietic.ap1.service.model.PromoModel;
 import com.abietic.ap1.validator.ValidationResult;
 import com.abietic.ap1.validator.ValidatorImpl;
+
+import org.apache.rocketmq.client.exception.MQBrokerException;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.remoting.exception.RemotingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @Service
 public class ItemServiceImpl implements ItemService {
+
+    @Autowired
+    private RocketMqProducer mqProducer;
 
     @Autowired
     private ItemMapper itemMapper;
@@ -36,6 +50,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private ValidatorImpl validator;
+
+    @Autowired
+    @Qualifier("cacheRedisRedisTemplate")
+    private RedisTemplate<Object, Object> jsonEnhancedRedisTemplate;
+
+    private static final Logger log = LoggerFactory.getLogger(ItemServiceImpl.class);
 
     /**
      * 将商品领域模型转为orm映射对象
@@ -129,9 +149,21 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public boolean decreaseStock(Integer itemId, Integer amount) {
-        int affectedRow = itemStockMapper.decreaseStock(itemId, amount);
-        if(affectedRow > 0){
+        // int affectedRow = itemStockMapper.decreaseStock(itemId, amount);
+        String promoItemStockKeyString = "promo_item_stock_" + itemId;
+        Long res = jsonEnhancedRedisTemplate.opsForValue().increment(promoItemStockKeyString, amount.intValue() * -1);
+        // if(affectedRow > 0){
+        if(res >= 0){
             //更新库存成功
+            log.info("New stock amount {}", res);
+            try {
+                SendResult sendResult = mqProducer.asyncDecreaseStock(itemId, amount);
+            } catch (MQClientException | RemotingException | MQBrokerException | InterruptedException e) {
+                e.printStackTrace();
+                // 撤回
+                jsonEnhancedRedisTemplate.opsForValue().increment(promoItemStockKeyString, amount.intValue());
+                return false;
+            }
             return true;
         }else {
             //更新库存失败
@@ -151,6 +183,19 @@ public class ItemServiceImpl implements ItemService {
         itemModel.setPrice(BigDecimal.valueOf(item.getPrice()));
         itemModel.setStock(itemStock.getStock());
 
+        return itemModel;
+    }
+
+    @Override
+    public ItemModel getItemByIdInCache(Integer id) {
+        String itemValidateKeyString = "item_validate_" + id;
+        ItemModel itemModel = (ItemModel) jsonEnhancedRedisTemplate.opsForValue().get(itemValidateKeyString);
+        if (itemModel == null) {
+            itemModel = this.getItemById(id);
+            if (itemModel != null) {
+                jsonEnhancedRedisTemplate.opsForValue().set(itemValidateKeyString, itemModel, Duration.ofMinutes(10));
+            }
+        }
         return itemModel;
     }
 }

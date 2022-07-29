@@ -2,11 +2,15 @@ package com.abietic.ap1.service.model;
 
 import org.joda.time.DateTime;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 
 
-public class PromoModel {
+public class PromoModel implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
 
     private Integer id;
 

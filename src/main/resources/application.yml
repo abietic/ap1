@@ -10,6 +10,11 @@ mybatis:
   configuration: 
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+rocketmq:
+  name-server: rocketmq-namesrv:9876
+  topic: stock
+  producer:
+    group: my-group
 spring:
   session:
     store-type: redis

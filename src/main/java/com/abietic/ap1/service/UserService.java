@@ -19,4 +19,7 @@ public interface UserService {
      * @throws BusinessException
      */
     UserModel vaildateLogin(String telphone, String encrptPassword) throws BusinessException;
+
+    // 带有redis缓存功能的获取用户对象
+    UserModel getUserByIdInCache(Integer id);
 }

@@ -32,6 +32,14 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+
+		<!-- 用来在spring中使用rocketmq -->
+		<dependency>
+			<groupId>org.apache.rocketmq</groupId>
+			<artifactId>rocketmq-spring-boot-starter</artifactId>
+			<version>2.0.3</version>
+		</dependency>
+
 		<!-- 如果在使用限流时有使用类似异步的方案，那么这种使用响应式的方案可能才会用 -->
 		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -87,7 +95,7 @@
 		</dependency>
 
 
-		<!-- 用来设置输出的时间格式，现在是给view object用的 -->
+		<!-- 用来设置输出的时间格式，现在是给view object用的虽然java8之后joda官方建议直接用java.util里的 -->
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>

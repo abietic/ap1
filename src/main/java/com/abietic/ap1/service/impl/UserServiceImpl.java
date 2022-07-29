@@ -10,10 +10,15 @@ import com.abietic.ap1.service.UserService;
 import com.abietic.ap1.service.model.UserModel;
 import com.abietic.ap1.validator.ValidationResult;
 import com.abietic.ap1.validator.ValidatorImpl;
+
+import java.time.Duration;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +34,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ValidatorImpl validator;
+
+    @Autowired
+    @Qualifier("cacheRedisRedisTemplate")
+    private RedisTemplate<Object, Object> jsonEnhancedRedisTemplate;
 
     @Override
     public UserModel getUserById(Integer id) {
@@ -139,6 +148,19 @@ public class UserServiceImpl implements UserService {
             userModel.setEncrptPassword(userPassword.getEncrptPassword());
         }
 
+        return userModel;
+    }
+
+    @Override
+    public UserModel getUserByIdInCache(Integer id) {
+        String userValidateKeyString = "user_validate_" + id;
+        UserModel userModel = (UserModel) jsonEnhancedRedisTemplate.opsForValue().get(userValidateKeyString);
+        if (userModel == null) {
+            userModel = getUserById(id);
+            if (userModel != null) {
+                jsonEnhancedRedisTemplate.opsForValue().set(userValidateKeyString, userModel, Duration.ofMinutes(10));
+            }
+        }
         return userModel;
     }
 }
