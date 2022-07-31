@@ -2,6 +2,7 @@ package com.abietic.ap1.controller;
 
 import com.abietic.ap1.error.BusinessException;
 import com.abietic.ap1.error.EmBusinessError;
+import com.abietic.ap1.mq.RocketMqProducer;
 import com.abietic.ap1.response.CommonReturnType;
 import com.abietic.ap1.service.OrderService;
 import com.abietic.ap1.service.model.OrderModel;
@@ -26,6 +27,9 @@ public class OrderController extends BaseController {
     @Autowired
     private HttpServletRequest httpServletRequest;
 
+    @Autowired
+    private RocketMqProducer mqProducer;
+
     //订单创建
     @PostMapping(value = "/createOrder", consumes = {CONTENT_TYPE_FORMED})
     public CommonReturnType createItem(@RequestParam(name = "itemId")Integer itemId,
@@ -41,7 +45,11 @@ public class OrderController extends BaseController {
         //获取用户的登录信息
         UserModel userModel = (UserModel) httpServletRequest.getSession().getAttribute("LOGIN_USER");
 
-        OrderModel orderModel = orderService.createOrder(userModel.getId(), itemId, promoId, amount);
+        // 非事务性的创建订单和扣减库存操作(只更新了缓存,未更新数据库)
+        // OrderModel orderModel = orderService.createOrder(userModel.getId(), itemId, promoId, amount);
+
+        // 使用事务性消息完成事务性的创建订单和异步扣减库存
+        mqProducer.transactionAsyncDecreaseStock(itemId, amount, promoId, userModel.getId());
 
         return CommonReturnType.create(null);
     }

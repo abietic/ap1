@@ -156,17 +156,19 @@ public class ItemServiceImpl implements ItemService {
         if(res >= 0){
             //更新库存成功
             log.info("New stock amount {}", res);
-            try {
-                SendResult sendResult = mqProducer.asyncDecreaseStock(itemId, amount);
-            } catch (MQClientException | RemotingException | MQBrokerException | InterruptedException e) {
-                e.printStackTrace();
-                // 撤回
-                jsonEnhancedRedisTemplate.opsForValue().increment(promoItemStockKeyString, amount.intValue());
-                return false;
-            }
+            // try {
+            //     SendResult sendResult = mqProducer.asyncDecreaseStock(itemId, amount);
+            // } catch (MQClientException | RemotingException | MQBrokerException | InterruptedException e) {
+            //     e.printStackTrace();
+            //     // 撤回
+            //     jsonEnhancedRedisTemplate.opsForValue().increment(promoItemStockKeyString, amount.intValue());
+            //     return false;
+            // }
             return true;
         }else {
             //更新库存失败
+            // 由于increment方法在key不存在时会先创建一个对应值为0的key再做操作
+            increaseStock(itemId, amount);
             return false;
         }
     }
@@ -197,5 +199,26 @@ public class ItemServiceImpl implements ItemService {
             }
         }
         return itemModel;
+    }
+
+    @Override
+    public boolean asyncDecreaseStock(Integer itemId, Integer amount) {
+        // String promoItemStockKeyString = "promo_item_stock_" + itemId;
+        try {
+            SendResult sendResult = mqProducer.asyncDecreaseStock(itemId, amount);
+        } catch (MQClientException | RemotingException | MQBrokerException | InterruptedException e) {
+            e.printStackTrace();
+            // // 撤回
+            // jsonEnhancedRedisTemplate.opsForValue().increment(promoItemStockKeyString, amount.intValue());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean increaseStock(Integer itemId, Integer amount) {
+        String promoItemStockKeyString = "promo_item_stock_" + itemId;
+        jsonEnhancedRedisTemplate.opsForValue().increment(promoItemStockKeyString, amount.intValue());
+        return true;
     }
 }
