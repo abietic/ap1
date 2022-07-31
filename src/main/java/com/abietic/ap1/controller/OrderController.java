@@ -4,6 +4,7 @@ import com.abietic.ap1.error.BusinessException;
 import com.abietic.ap1.error.EmBusinessError;
 import com.abietic.ap1.mq.RocketMqProducer;
 import com.abietic.ap1.response.CommonReturnType;
+import com.abietic.ap1.service.ItemService;
 import com.abietic.ap1.service.OrderService;
 import com.abietic.ap1.service.model.OrderModel;
 import com.abietic.ap1.service.model.UserModel;
@@ -23,6 +24,9 @@ public class OrderController extends BaseController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private ItemService itemService;
 
     @Autowired
     private HttpServletRequest httpServletRequest;
@@ -48,9 +52,15 @@ public class OrderController extends BaseController {
         // 非事务性的创建订单和扣减库存操作(只更新了缓存,未更新数据库)
         // OrderModel orderModel = orderService.createOrder(userModel.getId(), itemId, promoId, amount);
 
-        // 使用事务性消息完成事务性的创建订单和异步扣减库存
-        mqProducer.transactionAsyncDecreaseStock(itemId, amount, promoId, userModel.getId());
 
+        // 加入库存流水init状态
+        String stockLogId = itemService.initStockLog(itemId, amount);
+
+        // 使用事务性消息完成事务性的创建订单和异步扣减库存
+        boolean mqResult = mqProducer.transactionAsyncDecreaseStock(itemId, amount, promoId, userModel.getId(), stockLogId);
+        if (!mqResult) {
+            throw new BusinessException(EmBusinessError.UNKNOWN_ERROR, "下单失败");
+        }
         return CommonReturnType.create(null);
     }
 }

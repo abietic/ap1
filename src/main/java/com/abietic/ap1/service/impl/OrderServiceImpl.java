@@ -2,8 +2,10 @@ package com.abietic.ap1.service.impl;
 
 import com.abietic.ap1.mapper.OrderMapper;
 import com.abietic.ap1.mapper.SequenceMapper;
+import com.abietic.ap1.mapper.StockLogMapper;
 import com.abietic.ap1.model.Order;
 import com.abietic.ap1.model.Sequence;
+import com.abietic.ap1.model.StockLog;
 import com.abietic.ap1.error.BusinessException;
 import com.abietic.ap1.error.EmBusinessError;
 import com.abietic.ap1.service.ItemService;
@@ -43,9 +45,12 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private SequenceMapper sequenceMapper;
 
+    @Autowired
+    private StockLogMapper stockLogMapper;
+
     @Override
     @Transactional
-    public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount)
+    public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount, String stockLogId)
             throws BusinessException {
         // 1.校验下单状态，商品是否存在，用户是否合法，购买数量是否正确
         // ItemModel itemModel = itemService.getItemById(itemId); // 第一次mysql查询
@@ -103,6 +108,15 @@ public class OrderServiceImpl implements OrderService {
 
         // 加上商品的销量
         itemService.increaseSales(itemId, amount); // 一次数据修改，行锁
+
+        // 修改操作状态
+        StockLog stockLog = stockLogMapper.selectByPrimaryKey(stockLogId);
+        if (stockLog == null) {
+            throw new BusinessException(EmBusinessError.UNKNOWN_ERROR);
+        }
+        // 这里看起来没有进行锁,应该是因为本身id就是在线程内进行的,其他线程本来也得不到
+        stockLog.setStatus(2);
+        stockLogMapper.updateByPrimaryKeySelective(stockLog);
 
         // TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
 

@@ -32,4 +32,8 @@ public interface ItemService {
     // item 和 promo model 的缓存模型
     ItemModel getItemByIdInCache(Integer id);
 
+    // 初始化库存流水,记录本次事务的进行状态
+    // 1.代表初始化, 2.代表库存扣减事务成功, 3.代表事务回滚
+    String initStockLog(Integer itemId, Integer amount);
+
 }

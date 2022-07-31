@@ -2,8 +2,10 @@ package com.abietic.ap1.service.impl;
 
 import com.abietic.ap1.mapper.ItemMapper;
 import com.abietic.ap1.mapper.ItemStockMapper;
+import com.abietic.ap1.mapper.StockLogMapper;
 import com.abietic.ap1.model.Item;
 import com.abietic.ap1.model.ItemStock;
+import com.abietic.ap1.model.StockLog;
 import com.abietic.ap1.mq.RocketMqProducer;
 import com.abietic.ap1.error.BusinessException;
 import com.abietic.ap1.error.EmBusinessError;
@@ -30,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -44,6 +47,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private ItemStockMapper itemStockMapper;
+
+    @Autowired
+    private StockLogMapper stockLogMapper;
 
     @Autowired
     private PromoService promoService;
@@ -220,5 +226,20 @@ public class ItemServiceImpl implements ItemService {
         String promoItemStockKeyString = "promo_item_stock_" + itemId;
         jsonEnhancedRedisTemplate.opsForValue().increment(promoItemStockKeyString, amount.intValue());
         return true;
+    }
+
+    @Override
+    @Transactional
+    public String initStockLog(Integer itemId, Integer amount) {
+        StockLog stockLog = new StockLog();
+        stockLog.setItemId(itemId);
+        stockLog.setAmount(amount);
+        // 使用UUID作为stocklog的id
+        stockLog.setStockLogId(UUID.randomUUID().toString().replace("-", ""));
+        stockLog.setStatus(1);
+
+        stockLogMapper.insertSelective(stockLog);
+
+        return stockLog.getStockLogId();
     }
 }
