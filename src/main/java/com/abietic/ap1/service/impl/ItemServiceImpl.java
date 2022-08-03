@@ -159,7 +159,8 @@ public class ItemServiceImpl implements ItemService {
         String promoItemStockKeyString = "promo_item_stock_" + itemId;
         Long res = jsonEnhancedRedisTemplate.opsForValue().increment(promoItemStockKeyString, amount.intValue() * -1);
         // if(affectedRow > 0){
-        if(res >= 0){
+        // if(res >= 0){
+        if(res > 0){
             //更新库存成功
             log.info("New stock amount {}", res);
             // try {
@@ -171,7 +172,13 @@ public class ItemServiceImpl implements ItemService {
             //     return false;
             // }
             return true;
-        }else {
+        }else if (res == 0) {
+            // 标记商品已经售罄
+            String promoInvalidKeyString = "promo_item_stock_invalid_" + itemId; 
+            jsonEnhancedRedisTemplate.opsForValue().set(promoInvalidKeyString, "true");
+            // 这次库存更新也是成功了的
+            return true;
+        } else {
             //更新库存失败
             // 由于increment方法在key不存在时会先创建一个对应值为0的key再做操作
             increaseStock(itemId, amount);

@@ -10,4 +10,7 @@ public interface PromoService {
 
     void publishPromo(Integer promoId);
 
+    // 生成秒杀用的令牌
+    // 只有携带了合法令牌的下单申请才会被处理
+    String generateSecondKillToken (Integer promoId, Integer itemId, Integer userId);
 }
