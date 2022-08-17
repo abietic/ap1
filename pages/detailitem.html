@@ -52,8 +52,17 @@
 								<span id="sales"></span>
 							</div>
 							<br />
-							<button class="ui large red submit button" id="createorder" type="submit">下单</button>
+							<div id="verifyDiv" style="display: none;" class="form-actions">
+								<img src="" />
+								<input type="text" id="verifyContent" value="" />
+								<button class="btn blue" id="verifyButton" type="submit">验证</button>
+							</div>
+							<div class="form-actions">
+								<button class="ui large red submit button" id="createorder" type="submit">下单</button>
+							</div>
+
 						</div>
+
 					</div>
 
 				</div>
@@ -77,7 +86,7 @@
 		var g_itemVO = {};
 
 		jQuery(document).ready(function () {
-			$("#createorder").on("click", function () {
+			$("#verifyButton").on("click", function () {
 				// 获取秒杀资格
 				$.ajax({
 					type: "POST",
@@ -86,7 +95,8 @@
 					data: {
 						"itemId": g_itemVO.id,
 						// "amount": 1, // 要删掉
-						"promoId": g_itemVO.promoId
+						"promoId": g_itemVO.promoId,
+						"verifyCode": $("#verifyContent").val()
 					},
 					xhrFields: { withCredentials: true },
 					success: function (data) {
@@ -130,6 +140,63 @@
 					}
 
 				});
+			});
+			$("#createorder").on("click", function () {
+				$("#verifyDiv img").attr("src", "/api/order/generateCaptcha");
+				$("#verifyDiv").show();
+				// // 获取秒杀资格
+				// // 转移到验证中了
+				// $.ajax({
+				// 	type: "POST",
+				// 	contentType: "application/x-www-form-urlencoded",
+				// 	url: "/api/order/generateToken",
+				// 	data: {
+				// 		"itemId": g_itemVO.id,
+				// 		// "amount": 1, // 要删掉
+				// 		"promoId": g_itemVO.promoId
+				// 	},
+				// 	xhrFields: { withCredentials: true },
+				// 	success: function (data) {
+				// 		if ("success" == data.status) {
+				// 			// 获取令牌成功,将令牌保存到本地作为下单的凭证
+				// 			var promoToken = data.data;
+				// 			//  成功获得令牌后,进行下单操作
+				// 			$.ajax({
+				// 				type: "POST",
+				// 				contentType: "application/x-www-form-urlencoded",
+				// 				url: "/api/order/createOrder",
+				// 				data: {
+				// 					"itemId": g_itemVO.id,
+				// 					"amount": 1,
+				// 					"promoId": g_itemVO.promoId,
+				// 					"promoToken": promoToken
+				// 				},
+				// 				xhrFields: { withCredentials: true },
+				// 				success: function (data) {
+				// 					if ("success" == data.status) {
+				// 						alert("下单成功");
+				// 						window.location.reload();
+				// 					} else {
+				// 						alert("下单失败，原因为" + data.data.errMsg);
+				// 						if (data.data.errCode == 20003) {
+				// 							window.location.href = "login.html";
+				// 						}
+				// 					}
+				// 				},
+				// 				error: function (data) {
+				// 					alert("下单失败，原因为" + data.responseText);
+				// 				}
+
+				// 			});
+				// 		} else {
+				// 			alert("获取令牌失败，原因为" + data.data.errMsg);
+				// 		}
+				// 	},
+				// 	error: function (data) {
+				// 		alert("获取令牌失败，原因为" + data.responseText);
+				// 	}
+
+				// });
 
 
 			});

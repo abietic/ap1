@@ -27,6 +27,8 @@ import java.util.UUID;
 @Service
 public class PromoServiceImpl implements PromoService {
 
+    private static final int THRESHHOLD_FACTOR = 5;
+
     @Autowired
     private PromoMapper promoMapper;
 
@@ -78,9 +80,9 @@ public class PromoServiceImpl implements PromoService {
     }
 
     @Override
-    public void publishPromo(Integer promoId) {
+    public void publishPromo(Integer itemId) {
        // 通过活动id获取活动
-        Promo promo = promoMapper.selectByItemId(promoId);
+        Promo promo = promoMapper.selectByItemId(itemId);
         if (promo == null || promo.getId() == null || promo.getId().intValue() == 0) {
             return;
         }
@@ -93,10 +95,22 @@ public class PromoServiceImpl implements PromoService {
         // 将库存同步到redis内
         String promoItemStockKeyString = "promo_item_stock_" + itemModel.getId();
         jsonEnhancedRedisTemplate.opsForValue().set(promoItemStockKeyString, itemModel.getStock());
+
+        // 在发布商品促销时
+        // 将令牌流量大闸的限制数字设置到redis内
+        String promoThreshholdKeyString = "promo_threshhold_"+promo.getId();
+        // jsonEnhancedRedisTemplate.opsForValue().setIfAbsent(promoThreshholdKeyString, itemModel.getStock().intValue() * THRESHHOLD_FACTOR);
+        jsonEnhancedRedisTemplate.opsForValue().set(promoThreshholdKeyString, itemModel.getStock().intValue() * THRESHHOLD_FACTOR); // 这里
     }
 
     @Override
     public String generateSecondKillToken(Integer promoId, Integer itemId, Integer userId) {
+        // 如果相应商品已经售罄,再发布秒杀授权令牌就也不会成功生成订单了
+        String promoInvalidKeyString = "promo_item_stock_invalid_" + itemId;
+        if (jsonEnhancedRedisTemplate.hasKey(promoInvalidKeyString)) {
+            return null;
+        }
+
         Promo promoDO = promoMapper.selectByPrimaryKey(promoId);
         //entity->model
         PromoModel promoModel = convertFromEntity(promoDO);
@@ -132,6 +146,14 @@ public class PromoServiceImpl implements PromoService {
         // 判断用户是否存在
         UserModel userModel = userService.getUserByIdInCache(userId);
         if (userModel == null) {
+            return null;
+        }
+
+
+        // 获取秒杀大闸的count的数量,如果授权出去的令牌已经超出阈值,就直接放弃令牌生成
+        String promoThreshholdKeyString = "promo_threshhold_"+promoId;
+        Long result = jsonEnhancedRedisTemplate.opsForValue().increment(promoThreshholdKeyString, -1);
+        if (result < 0) {
             return null;
         }
 

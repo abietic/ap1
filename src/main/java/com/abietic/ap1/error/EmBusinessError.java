@@ -14,7 +14,8 @@ public enum EmBusinessError implements CommonError {
 
     //30000开头为交易信息错误定义
     STOCK_NOT_ENOUGH(30001, "库存不足"),
-    MQ_SEND_FAIL(30002, "库存异步更新消息队列失败")
+    MQ_SEND_FAIL(30002, "库存异步更新消息队列失败"),
+    RATE_LIMIT(30003, "系统繁忙,请稍后重试")
     ;
 
     private EmBusinessError(int errCode, String errMsg){
