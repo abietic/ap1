@@ -4,8 +4,10 @@
 <head>
 	<meta charset="utf-8">
 	<title>商品详情</title>
-	<link rel="stylesheet" href="./static/css/semantic.min.css">
-	<link rel="stylesheet" href="./static/css/manster.css">
+	<link rel="stylesheet" type="text/css" href="./static/css/semantic.css">
+	<link rel="stylesheet" type="text/css" href="./static/css/ap1style.css">
+	<script src="./static/js/jquery-3.3.1.js"></script>
+	<script src="./static/js/semantic.js"></script>
 </head>
 
 <body>
@@ -52,14 +54,20 @@
 								<span id="sales"></span>
 							</div>
 							<br />
-							<div id="verifyDiv" style="display: none;" class="form-actions">
-								<img src="" />
-								<input type="text" id="verifyContent" value="" />
-								<button class="btn blue" id="verifyButton" type="submit">验证</button>
+							<div id="verifyDiv" style="display: none;" class="row">
+
+								<img src="" class="ui image" id="cappic" />
+
+
+								<div class="ui action input">
+									<input type="text" id="verifyContent" value="" placeholder="验证码不区分大小写" />
+									<button class="ui large red submit button" id="verifyButton"
+										type="submit">验证</button>
+								</div>
+
+
 							</div>
-							<div class="form-actions">
-								<button class="ui large red submit button" id="createorder" type="submit">下单</button>
-							</div>
+							<button class="ui large red submit button" id="createorder" type="submit">下单</button>
 
 						</div>
 
@@ -69,9 +77,6 @@
 			</div>
 		</div>
 	</div>
-
-	<script src="./static/js/jquery-3.3.1.js"></script>
-	<script src="./static/js/semantic.min.js"></script>
 	<script>
 
 		function getParam(paramName) {
@@ -84,6 +89,7 @@
 		}
 
 		var g_itemVO = {};
+		var promoToken = "";
 
 		jQuery(document).ready(function () {
 			$("#verifyButton").on("click", function () {
@@ -102,7 +108,7 @@
 					success: function (data) {
 						if ("success" == data.status) {
 							// 获取令牌成功,将令牌保存到本地作为下单的凭证
-							var promoToken = data.data;
+							promoToken = data.data;
 							//  成功获得令牌后,进行下单操作
 							$.ajax({
 								type: "POST",
@@ -141,8 +147,9 @@
 
 				});
 			});
+
 			$("#createorder").on("click", function () {
-				$("#verifyDiv img").attr("src", "/api/order/generateCaptcha");
+				$("#cappic").attr("src", "/api/order/generateCaptcha");
 				$("#verifyDiv").show();
 				// // 获取秒杀资格
 				// // 转移到验证中了
@@ -201,6 +208,8 @@
 
 			});
 
+
+
 			//获取商品详情
 			$.ajax({
 				type: "GET",
@@ -215,6 +224,28 @@
 						reloadDom();
 						//开启定时任务
 						setInterval(reloadDom, 1000);
+
+						// 如果有相应商品存在可能需要加载库存数据到缓存
+						$.ajax({
+							type: "GET",
+							url: "/api/item/publishpromo",
+							data: {
+								"id": getParam("id")
+							},
+							xhrFields: { withCredentials: true },
+							success: function (data) {
+								if ("success" == data.status) {
+									g_itemVO.stock = data.data
+								} else {
+									alert("库存缓存信息加载失败，原因为" + data.data.errMsg);
+								}
+							},
+							error: function (data) {
+								alert("库存缓存信息加载失败，原因为，原因为" + data.responseText);
+							}
+
+						});
+
 					} else {
 						alert("获取信息失败，原因为" + data.data.errMsg);
 					}

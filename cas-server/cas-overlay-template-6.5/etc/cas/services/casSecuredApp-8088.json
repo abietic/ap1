@@ -1,0 +1,6 @@
+{
+  "@class" : "org.apereo.cas.services.RegexRegisteredService",
+  "serviceId" : "^(https|http|imaps)://.*",
+  "name" : "casSecuredApp",
+  "id" : 8088
+}

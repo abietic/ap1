@@ -30,8 +30,8 @@ services:
     image: mysql:5.7
     # 这个命令保证了数据库使用最长4bytes的UTF-8
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    # ports:
-      # - "3306:3306"
+    ports:
+      - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=123456
       # - MYSQL_ALLOW_EMPTY_PASSWORD=true
@@ -40,11 +40,11 @@ services:
       - MYSQL_DATABASE=ap1
     volumes:
       # 这一条是初始化要使用的数据库和表用的
-      # - "./db_test_entry:/docker-entrypoint-initdb.d"
+      # - "./mysql/db_test_entry:/docker-entrypoint-initdb.d"
       # 这条是生成的数据库文件存放的位置
-      - "./db_data_dir:/var/lib/mysql"
+      - "./mysql/db_data_dir:/var/lib/mysql"
       # 这个是设置数据库的配置文件，这时只设置了使用最长4bytes的UTF-8
-      - "./db_config:/etc/mysql/conf.d"
+      - "./mysql/db_config:/etc/mysql/conf.d"
     networks:
       back-tier:
         aliases:
@@ -52,10 +52,11 @@ services:
 
   spring-app:
     # image: maven:3-openjdk-8
-    image: maven:3-jdk-11
+    image: maven:3-jdk-11 # 如果用下面版本的image会导致生成验证码的模块找不到对应的font
+    # image: adoptopenjdk/openjdk11:alpine-slim
     working_dir: /app
     volumes:
-      - "./:/app"
+      - "./spring-app:/app"
       - "~/.m2:/root/.m2"
     depends_on:
       - db
@@ -67,7 +68,31 @@ services:
         aliases:
           - webapp
       back-tier:
-    command: ["./mvnw", "spring-boot:run"]
+    command: ["./mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments=\"-Xmx512m\""]
+    # command: ["./mvnw", "spring-boot:run", "-Dreactor.netty.http.server.accessLogEnabled=true"]
+    # command: ["./mvnw", "mybatis-generator:generate"]
+
+  # 服务端程序负载均衡的添加程序
+  spring-app-copy:
+    # image: maven:3-openjdk-8
+    image: maven:3-jdk-11 # 如果用下面版本的image会导致生成验证码的模块找不到对应的font
+    # image: adoptopenjdk/openjdk11:alpine-slim
+    working_dir: /app
+    volumes:
+      - "./spring-app:/app"
+      - "~/.m2:/root/.m2"
+    depends_on:
+      - db
+      - session-redis
+      - rocketmq-broker
+      - cache-redis 
+      - spring-app
+    networks:
+      front-tier:
+        aliases:
+          - webapp-copy
+      back-tier:
+    command: ["./mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments=\"-Xmx512m\""]
     # command: ["./mvnw", "spring-boot:run", "-Dreactor.netty.http.server.accessLogEnabled=true"]
     # command: ["./mvnw", "mybatis-generator:generate"]
 
@@ -101,20 +126,20 @@ services:
           - cache-redis
     command: [ "redis-server", "/etc/redis/redis.conf" ]
 
-  token-redis:
-    image: redis:5
-    # ports:
-    #   - "6379:6379"
-    volumes:
-      - "./redis/token-data:/data"
-      - "./redis/token-conf/redis.conf:/etc/redis/redis.conf"
-    # depends_on:
-    #   - db
-    networks:
-      back-tier:
-        aliases:
-          - token-redis
-    command: [ "redis-server", "/etc/redis/redis.conf" ]
+  # token-redis:
+  #   image: redis:5
+  #   # ports:
+  #   #   - "6379:6379"
+  #   volumes:
+  #     - "./redis/token-data:/data"
+  #     - "./redis/token-conf/redis.conf:/etc/redis/redis.conf"
+  #   # depends_on:
+  #   #   - db
+  #   networks:
+  #     back-tier:
+  #       aliases:
+  #         - token-redis
+  #   command: [ "redis-server", "/etc/redis/redis.conf" ]
 
   rocketmq-namesrv:
     image: rocketmqinc/rocketmq
@@ -128,6 +153,8 @@ services:
         aliases:
           - rocketmq-namesrv
     command: ["sh", "mqnamesrv"]
+    environment:
+      - MAX_POSSIBLE_HEAP=268435456
 
 
 
@@ -148,6 +175,11 @@ services:
     command: ["sh", "mqbroker", "-n", "rocketmq-namesrv:9876", "-c", "../conf/broker.conf"]
     depends_on:
       - rocketmq-namesrv
+    environment:
+      # 最大最大堆大小设置为512m
+      # - MAX_POSSIBLE_HEAP=536870912
+      # 最大最大堆大小设置为256m
+      - MAX_POSSIBLE_HEAP=268435456
 
 
   rocketmq-console-ng:
@@ -164,6 +196,23 @@ services:
       - JAVA_OPTS= -Dlogging.level.root=info   -Drocketmq.namesrv.addr=rocketmq-namesrv:9876 
       - Dcom.rocketmq.sendMessageWithVIPChannel=false
     
+
+  cas-server:
+    # image: org.apereo.cas/cas:6.1.5
+    image: apereo/cas:v6.5.8
+    # ports:
+    #   - "8089:8089"
+    # volumes:
+    #   - "./cas-server/cas-overlay-template-6.5/etc/cas/config:/etc/cas/config"
+    #   - "./cas-server/cas-overlay-template-6.5/etc/cas/services:/etc/cas/services"
+    depends_on:
+      - db
+    networks:
+      front-tier:
+        aliases:
+          - cas-server
+      back-tier:
+
   
   adminer:
     image: adminer

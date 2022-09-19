@@ -1,0 +1,4 @@
+HELP.md
+
+### redis backup files ###
+redis/*-data/
