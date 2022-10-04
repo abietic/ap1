@@ -26,17 +26,17 @@ public class CacheRedisConfiguration {
     private CacheRedisProperties cacheRedisProperty;
 
 
-    @Bean(name = "cacheRedisConnectionFactory")
-    public RedisConnectionFactory userRedisConnectionFactory() {
-        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(cacheRedisProperty.getHost(), cacheRedisProperty.getPort());
-        configuration.setPassword(cacheRedisProperty.getPassword());
-        LettuceConnectionFactory redisConnectionFactory = new LettuceConnectionFactory(configuration);
-        // redisConnectionFactory.setHostName(redis1Property.getHost());
-        // redisConnectionFactory.setPort(redis1Property.getPort());
-        // redisConnectionFactory.setDatabase(redis1Property.getDatabase());
-        // redisConnectionFactory.setPoolConfig(getPoolConfig());
-        return redisConnectionFactory;
-    }
+    // @Bean(name = "cacheRedisConnectionFactory")
+    // public RedisConnectionFactory userRedisConnectionFactory() {
+    //     RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(cacheRedisProperty.getHost(), cacheRedisProperty.getPort());
+    //     configuration.setPassword(cacheRedisProperty.getPassword());
+    //     LettuceConnectionFactory redisConnectionFactory = new LettuceConnectionFactory(configuration);
+    //     // redisConnectionFactory.setHostName(redis1Property.getHost());
+    //     // redisConnectionFactory.setPort(redis1Property.getPort());
+    //     // redisConnectionFactory.setDatabase(redis1Property.getDatabase());
+    //     // redisConnectionFactory.setPoolConfig(getPoolConfig());
+    //     return redisConnectionFactory;
+    // }
 
     // private JedisPoolConfig getPoolConfig() {
     //     JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
@@ -47,14 +47,14 @@ public class CacheRedisConfiguration {
     // }
 
     @Bean(name = "cacheRedisStringRedisTemplate")
-    public StringRedisTemplate userStringRedisTemplate(@Qualifier("cacheRedisConnectionFactory") RedisConnectionFactory cf) {
+    public StringRedisTemplate userStringRedisTemplate(@Qualifier("clusterCacheRedisConnectionFactory") RedisConnectionFactory cf) {
         StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
         stringRedisTemplate.setConnectionFactory(cf);
         return stringRedisTemplate;
     }
 
     @Bean(name = "cacheRedisRedisTemplate")
-    public RedisTemplate<Object, Object> userRedisTemplate(@Qualifier("cacheRedisConnectionFactory") RedisConnectionFactory cf) {
+    public RedisTemplate<Object, Object> userRedisTemplate(@Qualifier("clusterCacheRedisConnectionFactory") RedisConnectionFactory cf) {
         RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(cf);
         // key的序列化直接使用toString

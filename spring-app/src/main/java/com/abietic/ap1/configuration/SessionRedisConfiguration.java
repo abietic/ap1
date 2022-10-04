@@ -17,18 +17,18 @@ public class SessionRedisConfiguration {
     private SessionRedisProperties sessionRedisProperty;
 
 
-    @Primary
-    @Bean(name = "sessionRedisConnectionFactory")
-    public RedisConnectionFactory userRedisConnectionFactory() {
-        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(sessionRedisProperty.getHost(), sessionRedisProperty.getPort());
-        configuration.setPassword(sessionRedisProperty.getPassword());
-        LettuceConnectionFactory redisConnectionFactory = new LettuceConnectionFactory(configuration);
-        // redisConnectionFactory.setHostName(redis1Property.getHost());
-        // redisConnectionFactory.setPort(redis1Property.getPort());
-        // redisConnectionFactory.setDatabase(redis1Property.getDatabase());
-        // redisConnectionFactory.setPoolConfig(getPoolConfig());
-        return redisConnectionFactory;
-    }
+    // @Primary
+    // @Bean(name = "sessionRedisConnectionFactory")
+    // public RedisConnectionFactory userRedisConnectionFactory() {
+    //     RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(sessionRedisProperty.getHost(), sessionRedisProperty.getPort());
+    //     configuration.setPassword(sessionRedisProperty.getPassword());
+    //     LettuceConnectionFactory redisConnectionFactory = new LettuceConnectionFactory(configuration);
+    //     // redisConnectionFactory.setHostName(redis1Property.getHost());
+    //     // redisConnectionFactory.setPort(redis1Property.getPort());
+    //     // redisConnectionFactory.setDatabase(redis1Property.getDatabase());
+    //     // redisConnectionFactory.setPoolConfig(getPoolConfig());
+    //     return redisConnectionFactory;
+    // }
 
     // private JedisPoolConfig getPoolConfig() {
     //     JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();

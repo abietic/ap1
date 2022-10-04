@@ -8,6 +8,12 @@ networks:
   back-tier:
     # driver: overlay
     attachable: true
+  cluster-redis-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 173.17.0.0/16
 
 services:
   server-and-proxy:
@@ -60,14 +66,21 @@ services:
       - "~/.m2:/root/.m2"
     depends_on:
       - db
-      - session-redis
       - rocketmq-broker
-      - cache-redis 
+      # - cache-redis 
+      # - session-redis
+      - redis-1
+      - redis-2
+      - redis-3
+      - redis-4
+      - redis-5
+      - redis-6
     networks:
       front-tier:
         aliases:
           - webapp
       back-tier:
+      cluster-redis-net:
     command: ["./mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments=\"-Xmx512m\""]
     # command: ["./mvnw", "spring-boot:run", "-Dreactor.netty.http.server.accessLogEnabled=true"]
     # command: ["./mvnw", "mybatis-generator:generate"]
@@ -83,63 +96,26 @@ services:
       - "~/.m2:/root/.m2"
     depends_on:
       - db
-      - session-redis
       - rocketmq-broker
-      - cache-redis 
-      - spring-app
+      # - session-redis
+      # - cache-redis 
+      - redis-1
+      - redis-2
+      - redis-3
+      - redis-4
+      - redis-5
+      - redis-6
+
     networks:
       front-tier:
         aliases:
           - webapp-copy
       back-tier:
+      cluster-redis-net:
     command: ["./mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments=\"-Xmx512m\""]
     # command: ["./mvnw", "spring-boot:run", "-Dreactor.netty.http.server.accessLogEnabled=true"]
     # command: ["./mvnw", "mybatis-generator:generate"]
 
-  session-redis:
-    image: redis:5
-    # ports:
-    #   - "6379:6379"
-    volumes:
-      - "./redis/session-data:/data"
-      - "./redis/session-conf/redis.conf:/etc/redis/redis.conf"
-    # depends_on:
-    #   - db
-    networks:
-      back-tier:
-        aliases:
-          - session-redis
-    command: [ "redis-server", "/etc/redis/redis.conf" ]
-
-  cache-redis:
-    image: redis:5
-    # ports:
-    #   - "6379:6379"
-    volumes:
-      - "./redis/cache-data:/data"
-      - "./redis/cache-conf/redis.conf:/etc/redis/redis.conf"
-    # depends_on:
-    #   - db
-    networks:
-      back-tier:
-        aliases:
-          - cache-redis
-    command: [ "redis-server", "/etc/redis/redis.conf" ]
-
-  # token-redis:
-  #   image: redis:5
-  #   # ports:
-  #   #   - "6379:6379"
-  #   volumes:
-  #     - "./redis/token-data:/data"
-  #     - "./redis/token-conf/redis.conf:/etc/redis/redis.conf"
-  #   # depends_on:
-  #   #   - db
-  #   networks:
-  #     back-tier:
-  #       aliases:
-  #         - token-redis
-  #   command: [ "redis-server", "/etc/redis/redis.conf" ]
 
   rocketmq-namesrv:
     image: rocketmqinc/rocketmq
@@ -223,3 +199,101 @@ services:
         aliases:
           - dblooker
       back-tier:
+
+# 如果构建后还未设置redis cluster需要运行命令构成cluster
+# redis-cli -a 123456 --cluster create 173.17.0.2:6379 173.17.0.3:6379 173.17.0.4:6379 \
+# 173.17.0.5:6379 173.17.0.6:6379 173.17.0.7:6379 \
+# --cluster-replicas 1
+
+  redis-1:
+    image: redis:5
+    volumes:
+      - "./redis/redis-cluster/redis-1-data:/data"
+      - "./redis/redis-cluster/redis.conf:/etc/redis/redis.conf"
+    networks:
+      cluster-redis-net:
+        ipv4_address: 173.17.0.2
+    command: [ "redis-server", "/etc/redis/redis.conf" ]
+
+  redis-2:
+    image: redis:5
+    volumes:
+      - "./redis/redis-cluster/redis-2-data:/data"
+      - "./redis/redis-cluster/redis.conf:/etc/redis/redis.conf"
+    networks:
+      cluster-redis-net:
+        ipv4_address: 173.17.0.3
+    command: [ "redis-server", "/etc/redis/redis.conf" ]
+
+  redis-3:
+    image: redis:5
+    volumes:
+      - "./redis/redis-cluster/redis-3-data:/data"
+      - "./redis/redis-cluster/redis.conf:/etc/redis/redis.conf"
+    networks:
+      cluster-redis-net:
+        ipv4_address: 173.17.0.4
+    command: [ "redis-server", "/etc/redis/redis.conf" ]
+
+  redis-4:
+    image: redis:5
+    volumes:
+      - "./redis/redis-cluster/redis-4-data:/data"
+      - "./redis/redis-cluster/redis.conf:/etc/redis/redis.conf"
+    networks:
+      cluster-redis-net:
+        ipv4_address: 173.17.0.5
+    command: [ "redis-server", "/etc/redis/redis.conf" ]
+
+  redis-5:
+    image: redis:5
+    volumes:
+      - "./redis/redis-cluster/redis-5-data:/data"
+      - "./redis/redis-cluster/redis.conf:/etc/redis/redis.conf"
+    networks:
+      cluster-redis-net:
+        ipv4_address: 173.17.0.6
+    command: [ "redis-server", "/etc/redis/redis.conf" ]
+
+  redis-6:
+    image: redis:5
+    volumes:
+      - "./redis/redis-cluster/redis-6-data:/data"
+      - "./redis/redis-cluster/redis.conf:/etc/redis/redis.conf"
+    networks:
+      cluster-redis-net:
+        ipv4_address: 173.17.0.7
+    command: [ "redis-server", "/etc/redis/redis.conf" ]
+
+
+  # session-redis:
+  #   image: redis:5
+  #   # ports:
+  #   #   - "6379:6379"
+  #   volumes:
+  #     - "./redis/session-data:/data"
+  #     - "./redis/session-conf/redis.conf:/etc/redis/redis.conf"
+  #   # depends_on:
+  #   #   - db
+  #   networks:
+  #     back-tier:
+  #       aliases:
+  #         - session-redis
+  #     cluster-redis-net:
+  #   command: [ "redis-server", "/etc/redis/redis.conf" ]
+
+  # cache-redis:
+  #   image: redis:5
+  #   # ports:
+  #   #   - "6379:6379"
+  #   volumes:
+  #     - "./redis/cache-data:/data"
+  #     - "./redis/cache-conf/redis.conf:/etc/redis/redis.conf"
+  #   # depends_on:
+  #   #   - db
+  #   networks:
+  #     back-tier:
+  #       aliases:
+  #         - cache-redis
+  #     cluster-redis-net:
+  #   command: [ "redis-server", "/etc/redis/redis.conf" ]

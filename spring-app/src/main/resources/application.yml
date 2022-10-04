@@ -28,18 +28,44 @@ spring:
   #   host: session-redis
   #   password: foobared
   #   port: 6379
-  session-redis:
-    host: session-redis
-    password: foobared
-    port: 6379
-  cache-redis:
-    host: cache-redis
+  # session-redis:
+  #   host: session-redis
+  #   password: foobared
+  #   port: 6379
+  # cache-redis:
+  #   host: cache-redis
+  #   password: 123456
+  #   port: 6379
+  cluster-cache-redis:
     password: 123456
-    port: 6379
-  token-redis:
-    host: token-redis
-    password: 123456
-    port: 6379
+    hosts: 173.17.0.2, 173.17.0.3, 173.17.0.4, 173.17.0.5, 173.17.0.6, 173.17.0.7
+    ports: 6379, 6379, 6379, 6379, 6379, 6379
+    maxRedirects: 5
+  lettuce:
+      pool:
+        max-idle: 50
+        min-idle: 10
+        max-active: 100
+        max-wait: 1000
+
+    # node1:
+    #   host: 173.17.0.2
+    #   port: 6379
+    # node2:
+    #   host: 173.17.0.3
+    #   port: 6379
+    # node3:
+    #   host: 173.17.0.4
+    #   port: 6379
+    # node4:
+    #   host: 173.17.0.5
+    #   port: 6379
+    # node5:
+    #   host: 173.17.0.6
+    #   port: 6379
+    # node6:
+    #   host: 173.17.0.7
+    #   port: 6379
   
   datasource:
     # name: seckill

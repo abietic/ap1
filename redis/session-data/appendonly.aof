@@ -14697,3 +14697,611 @@ $13
 *1
 $8
 FLUSHALL
+*2
+$6
+SELECT
+$1
+0
+*10
+$5
+HMSET
+$59
+spring:sessionsessions:118aa8de-ce2c-42d7-86e1-4affb19c496f
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É†Ìg
+$19
+maxInactiveInterval
+$81
+¨Ì sr java.lang.Integer‚†§˜Åá8 I valuexr java.lang.NumberÜ¨ïî‡ã  xp  
+$12
+creationTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É†Ìf
+$18
+sessionAttr:123456
+$12
+¨Ì t 72731
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:118aa8de-ce2c-42d7-86e1-4affb19c496f
+$13
+1664855838183
+*2
+$6
+SELECT
+$1
+0
+*10
+$5
+HMSET
+$59
+spring:sessionsessions:b867e1e6-4dcc-48da-a965-47e5029b2f30
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É†Ûb
+$19
+maxInactiveInterval
+$81
+¨Ì sr java.lang.Integer‚†§˜Åá8 I valuexr java.lang.NumberÜ¨ïî‡ã  xp  
+$12
+creationTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É†Ûb
+$16
+sessionAttr:1111
+$12
+¨Ì t 94036
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:b867e1e6-4dcc-48da-a965-47e5029b2f30
+$13
+1664856248460
+*6
+$5
+HMSET
+$59
+spring:sessionsessions:b867e1e6-4dcc-48da-a965-47e5029b2f30
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É†˙Q
+$19
+sessionAttr:1111111
+$12
+¨Ì t 85329
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:b867e1e6-4dcc-48da-a965-47e5029b2f30
+$13
+1664856688593
+*2
+$6
+SELECT
+$1
+0
+*10
+$5
+HMSET
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É†ˇ@Ê
+$19
+maxInactiveInterval
+$81
+¨Ì sr java.lang.Integer‚†§˜Åá8 I valuexr java.lang.NumberÜ¨ïî‡ã  xp  
+$41
+sessionAttr:SPRING_SECURITY_SAVED_REQUEST
+$2000
+¨Ì sr Aorg.springframework.security.web.savedrequest.DefaultSavedRequest@HD˘6dî I 
+serverPortL contextPatht Ljava/lang/String;L cookiest Ljava/util/ArrayList;L headerst Ljava/util/Map;L localesq ~ L methodq ~ L 
+parametersq ~ L pathInfoq ~ L queryStringq ~ L 
+requestURIq ~ L 
+requestURLq ~ L schemeq ~ L 
+serverNameq ~ L servletPathq ~ xp   Pt  sr java.util.ArrayListxÅ“ô«aù I sizexp    w    xsr java.util.TreeMap¡ˆ>-%jÊ L 
+comparatort Ljava/util/Comparator;xpsr *java.lang.String$CaseInsensitiveComparatorw\}\PÂŒ  xpw   t acceptsq ~    w   t |text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9xt accept-encodingsq ~    w   t gzip, deflate, brxt accept-languagesq ~    w   t zh-CN,zh;q=0.9xt 
+connectionsq ~    w   t upgradext hostsq ~    w   t 	localhostxt referersq ~    w   t http://localhost/login.htmlxt 	sec-ch-uasq ~    w   t A"Microsoft Edge";v="105", "Not)A;Brand";v="8", "Chromium";v="105"xt sec-ch-ua-mobilesq ~    w   t ?0xt sec-ch-ua-platformsq ~    w   t 	"Windows"xt sec-fetch-destsq ~    w   t documentxt sec-fetch-modesq ~    w   t navigatext sec-fetch-sitesq ~    w   t same-originxt sec-fetch-usersq ~    w   t ?1xt upgrade-insecure-requestssq ~    w   t 1xt 
+user-agentsq ~    w   t ÅMozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.53xt x-forwarded-forsq ~    w   t 
+172.31.0.1xt x-nginx-proxysq ~    w   t truext 	x-real-ipsq ~    w   t 
+172.31.0.1xxsq ~    w   sr java.util.Locale~¯`ú0˘Ï I hashcodeL countryq ~ L 
+extensionsq ~ L languageq ~ L scriptq ~ L variantq ~ xpˇˇˇˇt CNq ~ t zhq ~ q ~ xsq ~ Dˇˇˇˇq ~ q ~ q ~ Gq ~ q ~ xxt GETsq ~ pw    xppt /api/user/centralLogint &http://localhost/api/user/centralLogint httpt 	localhostt /api/user/centralLogin
+$12
+creationTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É†ˇ@Ê
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$13
+1664857026406
+*8
+$5
+HMSET
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É†ˇ≥
+$42
+sessionAttr:SPRING_SECURITY_LAST_EXCEPTION
+$0
+
+$35
+sessionAttr:SPRING_SECURITY_CONTEXT
+$2957
+¨Ì sr =org.springframework.security.core.context.SecurityContextImpl       L authenticationt 2Lorg/springframework/security/core/Authentication;xpsr Forg.springframework.security.cas.authentication.CasAuthenticationToken       I keyHashL 	assertiont +Lorg/jasig/cas/client/validation/Assertion;L credentialst Ljava/lang/Object;L 	principalq ~ L userDetailst ;Lorg/springframework/security/core/userdetails/UserDetails;xr Gorg.springframework.security.authentication.AbstractAuthenticationToken”™(~nGd Z authenticatedL authoritiest Ljava/util/Collection;L detailsq ~ xpsr &java.util.Collections$UnmodifiableList¸%1µÏé L listt Ljava/util/List;xr ,java.util.Collections$UnmodifiableCollectionB ÄÀ^˜ L cq ~ xpsr java.util.ArrayListxÅ“ô«aù I sizexp   w   sr Borg.springframework.security.core.authority.SimpleGrantedAuthority       L rolet Ljava/lang/String;xpt 
+ROLE_ADMINxq ~ sr Horg.springframework.security.web.authentication.WebAuthenticationDetails       L remoteAddressq ~ L 	sessionIdq ~ xpt 
+172.31.0.5t $113dba5c-7fa1-4f09-b000-428374c8bd67Ç≥ësr -org.jasig.cas.client.validation.AssertionImplî2∏'·àZÀ L 
+attributest Ljava/util/Map;L authenticationDatet Ljava/util/Date;L 	principalt 8Lorg/jasig/cas/client/authentication/AttributePrincipal;L validFromDateq ~ L validUntilDateq ~ xpsr java.util.Collections$EmptyMapY6ÖZ‹Á–  xpsr java.util.DatehjÅKYt  xpw  É†ˇ¥Qxsr :org.jasig.cas.client.authentication.AttributePrincipalImplÎ¯…
+E+:- L 
+attributesq ~ L proxyGrantingTicketq ~ L proxyRetrievert +Lorg/jasig/cas/client/proxy/ProxyRetriever;xr 3org.jasig.cas.client.authentication.SimplePrincipal±ß©á˝øG L nameq ~ xpt 123456sr java.util.HashMap⁄¡√`— F 
+loadFactorI 	thresholdxp?@     w      	t credentialTypet UsernamePasswordCredentialt clientIpAddresst 
+172.31.0.1t isFromNewLogint truet authenticationDatet 2022-10-04T03:17:35.447079Zt authenticationMethodt "QueryDatabaseAuthenticationHandlert  successfulAuthenticationHandlerst "QueryDatabaseAuthenticationHandlert serverIpAddresst 
+172.31.0.2t 	userAgentt ÅMozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.53t &longTermAuthenticationRequestTokenUsedt falsexppsq ~ w  É†ˇ¥Qxpt -ST-1-z8leYfhlL5-36X1eAGXJO9gi0Rg-4ba1d0a5df15sr 'com.abietic.ap1.service.model.UserModel        	L aget Ljava/lang/Integer;L authoritiest Ljava/util/Set;L encrptPasswordq ~ L gendert Ljava/lang/Byte;L idq ~ =L nameq ~ L registerModeq ~ L telphoneq ~ L thirdPartyIdq ~ xpsr java.lang.Integer‚†§˜Åá8 I valuexr java.lang.NumberÜ¨ïî‡ã  xp   sr %java.util.Collections$UnmodifiableSetÄí—èõÄU  xq ~ sr java.util.TreeSet›òPìïÌá[  xpsr ;com.abietic.ap1.service.model.UserModel$AuthorityComparatorˇˇˇˇˇˇˇˇ  xpw   q ~ xpsr java.lang.ByteúN`ÑÓPı B valuexq ~ B0sq ~ A   t testt byphonet 123456t  q ~ @
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$13
+1664857055743
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$35
+sessionAttr:SPRING_SECURITY_CONTEXT
+$2957
+¨Ì sr =org.springframework.security.core.context.SecurityContextImpl       L authenticationt 2Lorg/springframework/security/core/Authentication;xpsr Forg.springframework.security.cas.authentication.CasAuthenticationToken       I keyHashL 	assertiont +Lorg/jasig/cas/client/validation/Assertion;L credentialst Ljava/lang/Object;L 	principalq ~ L userDetailst ;Lorg/springframework/security/core/userdetails/UserDetails;xr Gorg.springframework.security.authentication.AbstractAuthenticationToken”™(~nGd Z authenticatedL authoritiest Ljava/util/Collection;L detailsq ~ xpsr &java.util.Collections$UnmodifiableList¸%1µÏé L listt Ljava/util/List;xr ,java.util.Collections$UnmodifiableCollectionB ÄÀ^˜ L cq ~ xpsr java.util.ArrayListxÅ“ô«aù I sizexp   w   sr Borg.springframework.security.core.authority.SimpleGrantedAuthority       L rolet Ljava/lang/String;xpt 
+ROLE_ADMINxq ~ sr Horg.springframework.security.web.authentication.WebAuthenticationDetails       L remoteAddressq ~ L 	sessionIdq ~ xpt 
+172.31.0.5t $113dba5c-7fa1-4f09-b000-428374c8bd67Ç≥ësr -org.jasig.cas.client.validation.AssertionImplî2∏'·àZÀ L 
+attributest Ljava/util/Map;L authenticationDatet Ljava/util/Date;L 	principalt 8Lorg/jasig/cas/client/authentication/AttributePrincipal;L validFromDateq ~ L validUntilDateq ~ xpsr java.util.Collections$EmptyMapY6ÖZ‹Á–  xpsr java.util.DatehjÅKYt  xpw  É†ˇ¥Qxsr :org.jasig.cas.client.authentication.AttributePrincipalImplÎ¯…
+E+:- L 
+attributesq ~ L proxyGrantingTicketq ~ L proxyRetrievert +Lorg/jasig/cas/client/proxy/ProxyRetriever;xr 3org.jasig.cas.client.authentication.SimplePrincipal±ß©á˝øG L nameq ~ xpt 123456sr java.util.HashMap⁄¡√`— F 
+loadFactorI 	thresholdxp?@     w      	t credentialTypet UsernamePasswordCredentialt clientIpAddresst 
+172.31.0.1t isFromNewLogint truet authenticationDatet 2022-10-04T03:17:35.447079Zt authenticationMethodt "QueryDatabaseAuthenticationHandlert  successfulAuthenticationHandlerst "QueryDatabaseAuthenticationHandlert serverIpAddresst 
+172.31.0.2t 	userAgentt ÅMozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.53t &longTermAuthenticationRequestTokenUsedt falsexppsq ~ w  É†ˇ¥Qxpt -ST-1-z8leYfhlL5-36X1eAGXJO9gi0Rg-4ba1d0a5df15sr 'com.abietic.ap1.service.model.UserModel        	L aget Ljava/lang/Integer;L authoritiest Ljava/util/Set;L encrptPasswordq ~ L gendert Ljava/lang/Byte;L idq ~ =L nameq ~ L registerModeq ~ L telphoneq ~ L thirdPartyIdq ~ xpsr java.lang.Integer‚†§˜Åá8 I valuexr java.lang.NumberÜ¨ïî‡ã  xp   sr %java.util.Collections$UnmodifiableSetÄí—èõÄU  xq ~ sr java.util.TreeSet›òPìïÌá[  xpsr ;com.abietic.ap1.service.model.UserModel$AuthorityComparatorˇˇˇˇˇˇˇˇ  xpw   q ~ xpsr java.lang.ByteúN`ÑÓPı B valuexq ~ B0sq ~ A   t testt byphonet 123456t  q ~ @
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$13
+1664857055743
+*10
+$5
+HMSET
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É†ˇµL
+$22
+sessionAttr:LOGIN_USER
+$792
+¨Ì sr 'com.abietic.ap1.service.model.UserModel        	L aget Ljava/lang/Integer;L authoritiest Ljava/util/Set;L encrptPasswordt Ljava/lang/String;L gendert Ljava/lang/Byte;L idq ~ L nameq ~ L registerModeq ~ L telphoneq ~ L thirdPartyIdq ~ xpsr java.lang.Integer‚†§˜Åá8 I valuexr java.lang.NumberÜ¨ïî‡ã  xp   sr %java.util.Collections$UnmodifiableSetÄí—èõÄU  xr ,java.util.Collections$UnmodifiableCollectionB ÄÀ^˜ L ct Ljava/util/Collection;xpsr java.util.TreeSet›òPìïÌá[  xpsr ;com.abietic.ap1.service.model.UserModel$AuthorityComparatorˇˇˇˇˇˇˇˇ  xpw   sr Borg.springframework.security.core.authority.SimpleGrantedAuthority       L roleq ~ xpt 
+ROLE_ADMINxpsr java.lang.ByteúN`ÑÓPı B valuexq ~ 0sq ~    t testt byphonet 123456t  
+$41
+sessionAttr:SPRING_SECURITY_SAVED_REQUEST
+$0
+
+$20
+sessionAttr:IS_LOGIN
+$47
+¨Ì sr java.lang.BooleanÕ rÄ’ú˙Ó Z valuexp
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$13
+1664857056204
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É†ˇ∑ª
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$13
+1664857056827
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É†ˇ˜m
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$13
+1664857073133
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É†ˇ¯Ç
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$13
+1664857073410
+*6
+$5
+HMSET
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É° D$
+$25
+sessionAttr:happy-captcha
+$12
+¨Ì t dVnU6
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$13
+1664857092772
+*6
+$5
+HMSET
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É° ZŸ
+$25
+sessionAttr:happy-captcha
+$0
+
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$13
+1664857098585
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É° [%
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$13
+1664857098661
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É° aˆ
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$13
+1664857100406
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É° b
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:113dba5c-7fa1-4f09-b000-428374c8bd67
+$13
+1664857100429
+*2
+$6
+SELECT
+$1
+0
+*10
+$5
+HMSET
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É°pﬂ
+$19
+maxInactiveInterval
+$81
+¨Ì sr java.lang.Integer‚†§˜Åá8 I valuexr java.lang.NumberÜ¨ïî‡ã  xp  
+$41
+sessionAttr:SPRING_SECURITY_SAVED_REQUEST
+$2004
+¨Ì sr Aorg.springframework.security.web.savedrequest.DefaultSavedRequest@HD˘6dî I 
+serverPortL contextPatht Ljava/lang/String;L cookiest Ljava/util/ArrayList;L headerst Ljava/util/Map;L localesq ~ L methodq ~ L 
+parametersq ~ L pathInfoq ~ L queryStringq ~ L 
+requestURIq ~ L 
+requestURLq ~ L schemeq ~ L 
+serverNameq ~ L servletPathq ~ xp   Pt  sr java.util.ArrayListxÅ“ô«aù I sizexp    w    xsr java.util.TreeMap¡ˆ>-%jÊ L 
+comparatort Ljava/util/Comparator;xpsr *java.lang.String$CaseInsensitiveComparatorw\}\PÂŒ  xpw   t acceptsq ~    w   t |text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9xt accept-encodingsq ~    w   t gzip, deflate, brxt accept-languagesq ~    w   t zh-CN,zh;q=0.9xt 
+connectionsq ~    w   t upgradext hostsq ~    w   t 	localhostxt referersq ~    w   t http://localhost/login.htmlxt 	sec-ch-uasq ~    w   t A"Microsoft Edge";v="105", "Not)A;Brand";v="8", "Chromium";v="105"xt sec-ch-ua-mobilesq ~    w   t ?0xt sec-ch-ua-platformsq ~    w   t 	"Windows"xt sec-fetch-destsq ~    w   t documentxt sec-fetch-modesq ~    w   t navigatext sec-fetch-sitesq ~    w   t same-originxt sec-fetch-usersq ~    w   t ?1xt upgrade-insecure-requestssq ~    w   t 1xt 
+user-agentsq ~    w   t ÅMozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.53xt x-forwarded-forsq ~    w   t 192.168.32.1xt x-nginx-proxysq ~    w   t truext 	x-real-ipsq ~    w   t 192.168.32.1xxsq ~    w   sr java.util.Locale~¯`ú0˘Ï I hashcodeL countryq ~ L 
+extensionsq ~ L languageq ~ L scriptq ~ L variantq ~ xpˇˇˇˇt CNq ~ t zhq ~ q ~ xsq ~ Dˇˇˇˇq ~ q ~ q ~ Gq ~ q ~ xxt GETsq ~ pw    xppt /api/user/centralLogint &http://localhost/api/user/centralLogint httpt 	localhostt /api/user/centralLogin
+$12
+creationTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É°pﬂ
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$13
+1664857431903
+*8
+$5
+HMSET
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É°®Í
+$42
+sessionAttr:SPRING_SECURITY_LAST_EXCEPTION
+$0
+
+$35
+sessionAttr:SPRING_SECURITY_CONTEXT
+$2963
+¨Ì sr =org.springframework.security.core.context.SecurityContextImpl       L authenticationt 2Lorg/springframework/security/core/Authentication;xpsr Forg.springframework.security.cas.authentication.CasAuthenticationToken       I keyHashL 	assertiont +Lorg/jasig/cas/client/validation/Assertion;L credentialst Ljava/lang/Object;L 	principalq ~ L userDetailst ;Lorg/springframework/security/core/userdetails/UserDetails;xr Gorg.springframework.security.authentication.AbstractAuthenticationToken”™(~nGd Z authenticatedL authoritiest Ljava/util/Collection;L detailsq ~ xpsr &java.util.Collections$UnmodifiableList¸%1µÏé L listt Ljava/util/List;xr ,java.util.Collections$UnmodifiableCollectionB ÄÀ^˜ L cq ~ xpsr java.util.ArrayListxÅ“ô«aù I sizexp   w   sr Borg.springframework.security.core.authority.SimpleGrantedAuthority       L rolet Ljava/lang/String;xpt 
+ROLE_ADMINxq ~ sr Horg.springframework.security.web.authentication.WebAuthenticationDetails       L remoteAddressq ~ L 	sessionIdq ~ xpt 192.168.32.5t $a0e1def2-c521-4fb5-a7e2-f2bc29dfda0fÇ≥ësr -org.jasig.cas.client.validation.AssertionImplî2∏'·àZÀ L 
+attributest Ljava/util/Map;L authenticationDatet Ljava/util/Date;L 	principalt 8Lorg/jasig/cas/client/authentication/AttributePrincipal;L validFromDateq ~ L validUntilDateq ~ xpsr java.util.Collections$EmptyMapY6ÖZ‹Á–  xpsr java.util.DatehjÅKYt  xpw  É°©≥xsr :org.jasig.cas.client.authentication.AttributePrincipalImplÎ¯…
+E+:- L 
+attributesq ~ L proxyGrantingTicketq ~ L proxyRetrievert +Lorg/jasig/cas/client/proxy/ProxyRetriever;xr 3org.jasig.cas.client.authentication.SimplePrincipal±ß©á˝øG L nameq ~ xpt 123456sr java.util.HashMap⁄¡√`— F 
+loadFactorI 	thresholdxp?@     w      	t credentialTypet UsernamePasswordCredentialt clientIpAddresst 192.168.32.1t isFromNewLogint truet authenticationDatet 2022-10-04T03:24:06.009425Zt authenticationMethodt "QueryDatabaseAuthenticationHandlert  successfulAuthenticationHandlerst "QueryDatabaseAuthenticationHandlert serverIpAddresst 192.168.32.3t 	userAgentt ÅMozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.53t &longTermAuthenticationRequestTokenUsedt falsexppsq ~ w  É°©≥xpt -ST-1-4zpF9dS6dpuHIqUyqCUAnwbd1s4-a967beb812cesr 'com.abietic.ap1.service.model.UserModel        	L aget Ljava/lang/Integer;L authoritiest Ljava/util/Set;L encrptPasswordq ~ L gendert Ljava/lang/Byte;L idq ~ =L nameq ~ L registerModeq ~ L telphoneq ~ L thirdPartyIdq ~ xpsr java.lang.Integer‚†§˜Åá8 I valuexr java.lang.NumberÜ¨ïî‡ã  xp   sr %java.util.Collections$UnmodifiableSetÄí—èõÄU  xq ~ sr java.util.TreeSet›òPìïÌá[  xpsr ;com.abietic.ap1.service.model.UserModel$AuthorityComparatorˇˇˇˇˇˇˇˇ  xpw   q ~ xpsr java.lang.ByteúN`ÑÓPı B valuexq ~ B0sq ~ A   t testt byphonet 123456t  q ~ @
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$13
+1664857446250
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$35
+sessionAttr:SPRING_SECURITY_CONTEXT
+$2963
+¨Ì sr =org.springframework.security.core.context.SecurityContextImpl       L authenticationt 2Lorg/springframework/security/core/Authentication;xpsr Forg.springframework.security.cas.authentication.CasAuthenticationToken       I keyHashL 	assertiont +Lorg/jasig/cas/client/validation/Assertion;L credentialst Ljava/lang/Object;L 	principalq ~ L userDetailst ;Lorg/springframework/security/core/userdetails/UserDetails;xr Gorg.springframework.security.authentication.AbstractAuthenticationToken”™(~nGd Z authenticatedL authoritiest Ljava/util/Collection;L detailsq ~ xpsr &java.util.Collections$UnmodifiableList¸%1µÏé L listt Ljava/util/List;xr ,java.util.Collections$UnmodifiableCollectionB ÄÀ^˜ L cq ~ xpsr java.util.ArrayListxÅ“ô«aù I sizexp   w   sr Borg.springframework.security.core.authority.SimpleGrantedAuthority       L rolet Ljava/lang/String;xpt 
+ROLE_ADMINxq ~ sr Horg.springframework.security.web.authentication.WebAuthenticationDetails       L remoteAddressq ~ L 	sessionIdq ~ xpt 192.168.32.5t $a0e1def2-c521-4fb5-a7e2-f2bc29dfda0fÇ≥ësr -org.jasig.cas.client.validation.AssertionImplî2∏'·àZÀ L 
+attributest Ljava/util/Map;L authenticationDatet Ljava/util/Date;L 	principalt 8Lorg/jasig/cas/client/authentication/AttributePrincipal;L validFromDateq ~ L validUntilDateq ~ xpsr java.util.Collections$EmptyMapY6ÖZ‹Á–  xpsr java.util.DatehjÅKYt  xpw  É°©≥xsr :org.jasig.cas.client.authentication.AttributePrincipalImplÎ¯…
+E+:- L 
+attributesq ~ L proxyGrantingTicketq ~ L proxyRetrievert +Lorg/jasig/cas/client/proxy/ProxyRetriever;xr 3org.jasig.cas.client.authentication.SimplePrincipal±ß©á˝øG L nameq ~ xpt 123456sr java.util.HashMap⁄¡√`— F 
+loadFactorI 	thresholdxp?@     w      	t credentialTypet UsernamePasswordCredentialt clientIpAddresst 192.168.32.1t isFromNewLogint truet authenticationDatet 2022-10-04T03:24:06.009425Zt authenticationMethodt "QueryDatabaseAuthenticationHandlert  successfulAuthenticationHandlerst "QueryDatabaseAuthenticationHandlert serverIpAddresst 192.168.32.3t 	userAgentt ÅMozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.53t &longTermAuthenticationRequestTokenUsedt falsexppsq ~ w  É°©≥xpt -ST-1-4zpF9dS6dpuHIqUyqCUAnwbd1s4-a967beb812cesr 'com.abietic.ap1.service.model.UserModel        	L aget Ljava/lang/Integer;L authoritiest Ljava/util/Set;L encrptPasswordq ~ L gendert Ljava/lang/Byte;L idq ~ =L nameq ~ L registerModeq ~ L telphoneq ~ L thirdPartyIdq ~ xpsr java.lang.Integer‚†§˜Åá8 I valuexr java.lang.NumberÜ¨ïî‡ã  xp   sr %java.util.Collections$UnmodifiableSetÄí—èõÄU  xq ~ sr java.util.TreeSet›òPìïÌá[  xpsr ;com.abietic.ap1.service.model.UserModel$AuthorityComparatorˇˇˇˇˇˇˇˇ  xpw   q ~ xpsr java.lang.ByteúN`ÑÓPı B valuexq ~ B0sq ~ A   t testt byphonet 123456t  q ~ @
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$13
+1664857446250
+*10
+$5
+HMSET
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É°™ü
+$22
+sessionAttr:LOGIN_USER
+$792
+¨Ì sr 'com.abietic.ap1.service.model.UserModel        	L aget Ljava/lang/Integer;L authoritiest Ljava/util/Set;L encrptPasswordt Ljava/lang/String;L gendert Ljava/lang/Byte;L idq ~ L nameq ~ L registerModeq ~ L telphoneq ~ L thirdPartyIdq ~ xpsr java.lang.Integer‚†§˜Åá8 I valuexr java.lang.NumberÜ¨ïî‡ã  xp   sr %java.util.Collections$UnmodifiableSetÄí—èõÄU  xr ,java.util.Collections$UnmodifiableCollectionB ÄÀ^˜ L ct Ljava/util/Collection;xpsr java.util.TreeSet›òPìïÌá[  xpsr ;com.abietic.ap1.service.model.UserModel$AuthorityComparatorˇˇˇˇˇˇˇˇ  xpw   sr Borg.springframework.security.core.authority.SimpleGrantedAuthority       L roleq ~ xpt 
+ROLE_ADMINxpsr java.lang.ByteúN`ÑÓPı B valuexq ~ 0sq ~    t testt byphonet 123456t  
+$41
+sessionAttr:SPRING_SECURITY_SAVED_REQUEST
+$0
+
+$20
+sessionAttr:IS_LOGIN
+$47
+¨Ì sr java.lang.BooleanÕ rÄ’ú˙Ó Z valuexp
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$13
+1664857446687
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É°¨ˇ
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$13
+1664857447295
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É°≤^
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$13
+1664857448670
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É°¥
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$13
+1664857449106
+*6
+$5
+HMSET
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É°∫1
+$25
+sessionAttr:happy-captcha
+$12
+¨Ì t mcA94
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$13
+1664857450673
+*6
+$5
+HMSET
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É°◊k
+$25
+sessionAttr:happy-captcha
+$0
+
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$13
+1664857458155
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É°◊»
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$13
+1664857458248
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É°ﬁD
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$13
+1664857459908
+*4
+$5
+HMSET
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$16
+lastAccessedTime
+$82
+¨Ì sr java.lang.Long;ã‰êÃè#ﬂ J valuexr java.lang.NumberÜ¨ïî‡ã  xp  É°ﬁ[
+*3
+$9
+PEXPIREAT
+$59
+spring:sessionsessions:a0e1def2-c521-4fb5-a7e2-f2bc29dfda0f
+$13
+1664857459931

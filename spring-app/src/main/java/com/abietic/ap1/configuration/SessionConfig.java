@@ -21,6 +21,7 @@ import java.time.Duration;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.session.RedisSessionProperties;
 import org.springframework.boot.autoconfigure.session.SessionProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -41,22 +42,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(RedisSessionProperties.class)
 @EnableSpringHttpSession
-public class SessionConfig{
+public class SessionConfig {
 
 	private final SessionProperties sessionProperties;
 
 	private final RedisSessionProperties redisSessionProperties;
 
-	private final RedisConnectionFactory redisConnectionFactory;
+	@Autowired
+	@Qualifier("clusterCacheRedisConnectionFactory")
+	private RedisConnectionFactory redisConnectionFactory;
 
 	@Autowired
 	private JSONRedisSerializer sessionSerializer;
 
-	public SessionConfig(SessionProperties sessionProperties, RedisSessionProperties redisSessionProperties,
-			ObjectProvider<RedisConnectionFactory> redisConnectionFactory) {
+	// public SessionConfig(SessionProperties sessionProperties,
+	// RedisSessionProperties redisSessionProperties,
+	// ObjectProvider<RedisConnectionFactory> redisConnectionFactory) {
+	public SessionConfig(SessionProperties sessionProperties, RedisSessionProperties redisSessionProperties) {
 		this.sessionProperties = sessionProperties;
 		this.redisSessionProperties = redisSessionProperties;
-		this.redisConnectionFactory = redisConnectionFactory.getObject();
+		// this.redisConnectionFactory = redisConnectionFactory.getObject();
 	}
 
 	@Bean
@@ -83,9 +88,8 @@ public class SessionConfig{
 		return sessionRepository;
 	}
 
-
 	// @Bean
-    // RedisSerializer<Object> springSessionDefaultRedisSerializer() {
-    //     return this.sessionSerializer;
-    // }
+	// RedisSerializer<Object> springSessionDefaultRedisSerializer() {
+	// return this.sessionSerializer;
+	// }
 }

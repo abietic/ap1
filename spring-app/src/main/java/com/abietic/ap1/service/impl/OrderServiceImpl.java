@@ -185,14 +185,15 @@ public class OrderServiceImpl implements OrderService {
         return orderDO;
     }
 
-    private Integer getSequenceByNameInCache(String name) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Integer getSequenceByNameInCache(String name) {
         String sequenceValueKeyString = "seq_val_" + name;
         String sequenceStepKeyString = "seq_step_" + name;
         Integer res = null, step = null;
-        // TODO:注意这里两个变量分别操作,不是原子性的,可能会出现初始化问题,要想解决需要使用脚本
+        // TODO:注意这里两个变量分别操作,不是原子性的,可能会出现初始化问题,要想解决需要使用脚本,而且由于后面使用了redis-cluster还要强制两个值放在同一slot保证操作的原子性,现在的现象来看,两者放在了不同的slot
         if ((step = (Integer)jsonEnhancedRedisTemplate.opsForValue().get(sequenceStepKeyString)) != null) {
             res = jsonEnhancedRedisTemplate.opsForValue().increment(sequenceValueKeyString, step.longValue()).intValue();
-            return res;
+            return res - ((Integer)jsonEnhancedRedisTemplate.opsForValue().get(sequenceStepKeyString)).intValue();
         }
         // 但是下面的操作中的select有加for update修饰,会带来锁某种意义上能弥合上面非原子性的问题
         int sequence = 0;
