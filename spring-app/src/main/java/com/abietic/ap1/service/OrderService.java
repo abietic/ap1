@@ -12,8 +12,9 @@ public interface OrderService {
 
     // 生成订单号
     // 由于如果用自增做订单号会带来全表
-    String generateOrderNo();
+    String generateOrderNo()throws BusinessException;
 
-    Integer getSequenceByNameInCache(String name);
+    // 将生成订单号序列号的部分从数据库缓存到缓存中,减少访问与更新数据库次数
+    Integer getSequenceByNameInCache(String name)throws BusinessException;
 
 }

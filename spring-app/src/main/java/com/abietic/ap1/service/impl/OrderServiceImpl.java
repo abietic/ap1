@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,8 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author manster
@@ -53,6 +56,18 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     @Qualifier("cacheRedisRedisTemplate")
     private RedisTemplate<Object, Object> jsonEnhancedRedisTemplate;
+
+    @Autowired
+    @Qualifier("checkSeqInitializedScript")
+    private RedisScript<Boolean> checkSeqInitializedScript;
+
+    @Autowired
+    @Qualifier("seqInitializeScript")
+    private RedisScript<Integer> seqInitializeScript;
+
+    @Autowired
+    @Qualifier("getSeqScript")
+    private RedisScript<Long> getSeqScript;
 
     @Override
     @Transactional
@@ -124,17 +139,19 @@ public class OrderServiceImpl implements OrderService {
         stockLog.setStatus(2);
         stockLogMapper.updateByPrimaryKeySelective(stockLog);
 
-        // TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+        // TransactionSynchronizationManager.registerSynchronization(new
+        // TransactionSynchronization() {
 
-        //     @Override
-        //     public void afterCommit() {
-        //         // 异步更新库存
-        //         boolean mqResult = itemService.asyncDecreaseStock(itemId, amount); // 发送和消费失败会导致数据库与缓存不同步
-        //         // if (!mqResult) {
-        //         //     itemService.increaseStock(itemId, amount);
-        //         //     throw new BusinessException(EmBusinessError.MQ_SEND_FAIL);
-        //         // }
-        //     }
+        // @Override
+        // public void afterCommit() {
+        // // 异步更新库存
+        // boolean mqResult = itemService.asyncDecreaseStock(itemId, amount); //
+        // 发送和消费失败会导致数据库与缓存不同步
+        // // if (!mqResult) {
+        // // itemService.increaseStock(itemId, amount);
+        // // throw new BusinessException(EmBusinessError.MQ_SEND_FAIL);
+        // // }
+        // }
 
         // });
 
@@ -144,7 +161,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String generateOrderNo() {
+    public String generateOrderNo() throws BusinessException {
         // 订单号16位
         StringBuilder stringBuilder = new StringBuilder();
         // 前8位为 年月日
@@ -157,7 +174,8 @@ public class OrderServiceImpl implements OrderService {
         // int sequence = 0;
         // Sequence sequenceDO = sequenceMapper.getSequenceByName("order_info");
         // sequence = sequenceDO.getCurrentValue();
-        // sequenceDO.setCurrentValue(sequenceDO.getCurrentValue() + sequenceDO.getStep());
+        // sequenceDO.setCurrentValue(sequenceDO.getCurrentValue() +
+        // sequenceDO.getStep());
         // sequenceMapper.updateByPrimaryKey(sequenceDO);
         int sequence = this.getSequenceByNameInCache("order_info");
 
@@ -186,26 +204,50 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Integer getSequenceByNameInCache(String name) {
+    public Integer getSequenceByNameInCache(String name) throws BusinessException {
         String sequenceValueKeyString = "seq_val_" + name;
         String sequenceStepKeyString = "seq_step_" + name;
+        Integer hashTag = 100;
+        String taggedSequenceValueKeyString = sequenceValueKeyString + "{" + hashTag + "}";
+        String taggedSequenceStepKeyString = sequenceStepKeyString + "{" + hashTag + "}";
         Integer res = null, step = null;
-        // TODO:注意这里两个变量分别操作,不是原子性的,可能会出现初始化问题,要想解决需要使用脚本,而且由于后面使用了redis-cluster还要强制两个值放在同一slot保证操作的原子性,现在的现象来看,两者放在了不同的slot
-        if ((step = (Integer)jsonEnhancedRedisTemplate.opsForValue().get(sequenceStepKeyString)) != null) {
-            res = jsonEnhancedRedisTemplate.opsForValue().increment(sequenceValueKeyString, step.longValue()).intValue();
-            return res - ((Integer)jsonEnhancedRedisTemplate.opsForValue().get(sequenceStepKeyString)).intValue();
+        List<Object> keys = new ArrayList<>();
+        keys.add(taggedSequenceValueKeyString);
+        keys.add(taggedSequenceStepKeyString);
+        if (jsonEnhancedRedisTemplate.execute(checkSeqInitializedScript, keys)) {
+            res = jsonEnhancedRedisTemplate.execute(getSeqScript, keys).intValue();
+            if (res < 0) {
+                throw new BusinessException(EmBusinessError.UNKNOWN_ERROR, "Sequnce number fetch from cache failed.");
+            }
+            return res;
         }
+        // TODO:注意这里两个变量分别操作,不是原子性的,可能会出现初始化问题,要想解决需要使用脚本,而且由于后面使用了redis-cluster还要强制两个值放在同一slot保证操作的原子性,现在的现象来看,两者放在了不同的slot
+        // if ((step =
+        // (Integer)jsonEnhancedRedisTemplate.opsForValue().get(sequenceStepKeyString))
+        // != null) {
+        // res =
+        // jsonEnhancedRedisTemplate.opsForValue().increment(sequenceValueKeyString,
+        // step.longValue()).intValue();
+        // return res -
+        // ((Integer)jsonEnhancedRedisTemplate.opsForValue().get(sequenceStepKeyString)).intValue();
+        // }
         // 但是下面的操作中的select有加for update修饰,会带来锁某种意义上能弥合上面非原子性的问题
-        int sequence = 0;
+        // int sequence = 0;
         Sequence sequenceDO = sequenceMapper.getSequenceByName("order_info");
-        sequence = sequenceDO.getCurrentValue();
-        sequenceDO.setCurrentValue(sequenceDO.getCurrentValue()); // 会进行异步更新这里不需要更新数值
-        jsonEnhancedRedisTemplate.opsForValue().set(sequenceStepKeyString, sequenceDO.getStep());
-        jsonEnhancedRedisTemplate.opsForValue().set(sequenceValueKeyString, Integer.valueOf(sequence + sequenceDO.getStep()));
-        // sequenceMapper.updateByPrimaryKey(sequenceDO);
+        // sequence = sequenceDO.getCurrentValue();
+        res = jsonEnhancedRedisTemplate
+                .execute(seqInitializeScript, keys, sequenceDO.getCurrentValue(), sequenceDO.getStep()).intValue(); // 这里传入的两个ARGV类型就是Integer所以在脚本部分没有使用tonumber包裹
+        if (res < 0) {
+            throw new BusinessException(EmBusinessError.UNKNOWN_ERROR, "Sequnce number init in cache failed.");
+        }
+        return res;
+        // sequenceDO.setCurrentValue(sequenceDO.getCurrentValue()); // 会进行异步更新这里不需要更新数值
+        // jsonEnhancedRedisTemplate.opsForValue().set(sequenceStepKeyString,
+        // sequenceDO.getStep());
+        // jsonEnhancedRedisTemplate.opsForValue().set(sequenceValueKeyString,
+        // Integer.valueOf(sequence + sequenceDO.getStep()));
 
-        
-        return sequence;
+        // return sequence;
     }
 
 }
