@@ -10,6 +10,11 @@ import com.abietic.ap1.service.model.PromoModel;
 import com.abietic.ap1.service.model.UserModel;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.DurationField;
+import org.joda.time.Interval;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.temporal.Temporal;
 import java.util.UUID;
 
 /**
@@ -26,6 +32,8 @@ import java.util.UUID;
  **/
 @Service
 public class PromoServiceImpl implements PromoService {
+
+    private static final Logger logger = LoggerFactory.getLogger(PromoServiceImpl.class);
 
     private static final int THRESHHOLD_FACTOR = 5;
 
@@ -100,15 +108,29 @@ public class PromoServiceImpl implements PromoService {
 
 
         // TODO:注意这里的redis缓存没有设置超时,未来需要做处理
-        // 将库存同步到redis内
+        // 将库存同步到redis内,根据促销日期确定促销的库存缓存与大闸缓存存在时间
         promoItemStockKeyString = "promo_item_stock_" + itemModel.getId();
-        jsonEnhancedRedisTemplate.opsForValue().set(promoItemStockKeyString, itemModel.getStock());
+        PromoModel pm = itemModel.getPromoModel();
+        org.joda.time.Duration duration = null;
+        if (pm != null) {
+            try {
+                duration = new org.joda.time.Duration(DateTime.now(DateTimeZone.forOffsetHours(8)), pm.getEndDate());
+                logger.info("{} minutes before promotion end.", duration.getStandardMinutes());
+            } catch (Exception e) {
+                logger.error("Error happened when try to calculate time the promo stock need to stay.", e);
+            }
+        }
+        if (duration == null) {
+            duration = org.joda.time.Duration.standardHours(1);
+        }
+        duration = duration.plus(org.joda.time.Duration.standardMinutes(30));
+        jsonEnhancedRedisTemplate.opsForValue().set(promoItemStockKeyString, itemModel.getStock(), Duration.ofSeconds(duration.getStandardSeconds()));
 
         // 在发布商品促销时
         // 将令牌流量大闸的限制数字设置到redis内
         String promoThreshholdKeyString = "promo_threshhold_"+promo.getId();
         // jsonEnhancedRedisTemplate.opsForValue().setIfAbsent(promoThreshholdKeyString, itemModel.getStock().intValue() * THRESHHOLD_FACTOR);
-        jsonEnhancedRedisTemplate.opsForValue().set(promoThreshholdKeyString, itemModel.getStock().intValue() * THRESHHOLD_FACTOR); // 这里
+        jsonEnhancedRedisTemplate.opsForValue().set(promoThreshholdKeyString, itemModel.getStock().intValue() * THRESHHOLD_FACTOR, Duration.ofSeconds(duration.getStandardSeconds())); // 这里
 
         res = (Integer)jsonEnhancedRedisTemplate.opsForValue().get(promoItemStockKeyString);
         return res;
